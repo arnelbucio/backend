@@ -54,6 +54,26 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+function generateId(min, max) {
+  min = 0;
+  max = 9999999999;
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId(),
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   persons = persons.filter(person => person.id !== id)
