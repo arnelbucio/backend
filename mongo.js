@@ -6,34 +6,39 @@ if (process.argv.length < 3) {
 }
 
 const password = process.argv[2]
+const name = process.argv[3]
+const number = process.argv[4]
 
 const url =
-  `mongodb+srv://fsoarnel:${password}@cluster0.pef8r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+  `mongodb+srv://fsoarnel:${password}@cluster0.chxzt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 
 mongoose.connect(url)
 
-const noteSchema = new mongoose.Schema({
-  content: String,
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
   date: Date,
-  important: Boolean,
 })
 
-const Note = mongoose.model('Note', noteSchema)
+const Person = mongoose.model('Person', personSchema)
 
-const note = new Note({
-  content: 'HTML is Easy',
-  date: new Date(),
-  important: true,
-})
 
-// note.save().then(result => {
-//   console.log('note saved!')
-//   mongoose.connection.close()
-// })
-
-Note.find({}).then(result => {
-  result.forEach(note => {
-    console.log(note)
+if (process.argv.length < 4) {
+  Person.find({}).then(result => {
+    result.forEach(person => {
+      console.log(person)
+    })
+    mongoose.connection.close()
   })
-  mongoose.connection.close()
-})
+} else {
+  const person = new Person({
+    name: name,
+    number: number,
+    date: new Date(),
+  })
+
+  person.save().then(result => {
+    console.log(`added ${name} number ${number} to phonebook`)
+    mongoose.connection.close()
+  })
+}
