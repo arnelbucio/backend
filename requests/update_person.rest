@@ -1,0 +1,17 @@
+PUT http://localhost:3001/api/persons/62551e228a6bc0ebbcd0e4a9
+Content-Type: application/json
+
+{
+  "name": "Anna",
+  "number": "040-1234557"
+}
+
+
+### Test validation
+PUT http://localhost:3001/api/persons/62551e228a6bc0ebbcd0e4a9
+Content-Type: application/json
+
+{
+  "name": "A",
+  "number": "040-1234557"
+}
