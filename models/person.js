@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator');
 
 
 const url = process.env.MONGODB_URI
@@ -18,15 +19,16 @@ const personSchema = new mongoose.Schema({
     type: String,
     minLength: 3,
     required: true,
-    validate: {
-      validator: async function(name) {
-        const person = await this.constructor.findOne({ name });
-        if(person) {
-          return false;
-        }
-      },
-      message: props => `${props.value} already exists`
-    }
+    unique: true
+    // validate: {
+    //   validator: async function(name) {
+    //     const person = await this.constructor.findOne({ name });
+    //     if(person) {
+    //       return false;
+    //     }
+    //   },
+    //   message: props => `${props.value} already exists`
+    // }
   },
   number: {
     type: String,
@@ -42,6 +44,9 @@ const personSchema = new mongoose.Schema({
   date: Date,
 })
 
+personSchema.plugin(uniqueValidator);
+
+
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
@@ -49,5 +54,8 @@ personSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
+
+
 
 module.exports = mongoose.model('Person', personSchema)
